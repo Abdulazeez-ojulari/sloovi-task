@@ -1,0 +1,35 @@
+.dashBoard_container{
+    display: grid;
+    height: 100vh;
+    grid-template-columns: 250px 1fr;
+}
+
+.dashBoard_col_1{
+    display: grid;
+    grid-template-rows: max-content 1fr 6rem;
+    grid-gap: 5px;
+    background-color: #323e4d;
+}
+
+.dashBoard_col_2{
+    display: grid;
+    grid-template-rows: 50px 1fr;
+}
+
+.dashBoard_col_2_row_1{
+    width: 100%;
+    box-shadow: 0px 0.1px 9.5px #c7c7c7;
+}
+
+.dashBoard_col_2_row_2{
+    padding: 2rem;
+}
+
+.dashBoard_tasks_section{
+    margin-top: 10rem;
+    display: grid;
+    width: 370px;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+}
+

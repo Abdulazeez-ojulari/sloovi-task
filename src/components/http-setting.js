@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const axiosClient = axios.create({
-  baseURL: `http://localhost:3000/api`,
+  baseURL: `https://stage.api.sloovi.com/task/lead_465c14d0e99e4972b6b21ffecf3dd691`,
   headers: {
     'Accept': 'application/json',
     'Content-Type': 'application/json',

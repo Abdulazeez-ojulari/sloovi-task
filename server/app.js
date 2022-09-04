@@ -3,25 +3,72 @@ const express = require('express');
 const app = express();
 // const cors = require('cors');
 const path = require('path');
-
-var corsOption = {
-    origin: ["http://localhost:3001", "https://glacial-brook-33351.herokuapp.com", "http://localhost:3000", "http://localhost:3002", "http://localhost:3003"]
-};
+const { axiosClient } = require('./http-setting');
 
 // app.use(cors(corsOption));
 
 app.use(express.static(path.join(__dirname, '..', 'build')));
 
+app.get('/teams', (req, res) => {
+  axiosClient.get('https://stage.api.sloovi.com/team?product=outreach&company_id=company_413ef22b6237417fb1fba7917f0f69e7')
+  .then(response => {
+    res.send(response.data)
+  }).catch(err => {console.log(err.message)})
+})
+
 app.get('/tasks', (req, res) => {
-    axios({
-        url: 'https://stage.api.sloovi.com/task/lead_465c14d0e99e4972b6b21ffecf3dd691?company_id=company_413ef22b6237417fb1fba7917f0f69e7',
-        method: 'get',
-          headers: {
-            'Authorization': 'Bearer ' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NjIxNjMyMDksIm5iZiI6MTY2MjE2MzIwOSwianRpIjoiMzkyMGY3NDEtZmNhZC00YmM2LWE4MGMtYjBkYjVlMTY2YTEwIiwiaWRlbnRpdHkiOnsibmFtZSI6IlN1bmRhciBQaWNoYWkiLCJlbWFpbCI6InNtaXRod2lsbHMxOTg5QGdtYWlsLmNvbSIsInVzZXJfaWQiOiJ1c2VyXzRlZTRjZjY3YWQ0NzRhMjc5ODhiYzBhZmI4NGNmNDcyIiwiaWNvbiI6Imh0dHA6Ly93d3cuZ3JhdmF0YXIuY29tL2F2YXRhci9jZjk0Yjc0YmQ0MWI0NjZiYjE4NWJkNGQ2NzRmMDMyYj9kZWZhdWx0PWh0dHBzJTNBJTJGJTJGczMuc2xvb3ZpLmNvbSUyRmF2YXRhci1kZWZhdWx0LWljb24ucG5nIiwiYnlfZGVmYXVsdCI6Im91dHJlYWNoIn0sImZyZXNoIjpmYWxzZSwidHlwZSI6ImFjY2VzcyJ9.3ZdOwPIiAVQMBv4QoITBmlU_ZiVbwr2B-IRNc0L3iwM',
-        }
-      }).then(response => {
+      axiosClient.get('?company_id=company_413ef22b6237417fb1fba7917f0f69e7')
+      .then(response => {
         res.send(response.data)
       }).catch(err => {console.log(err.message)})
+})
+
+app.post('/task', (req, res) => {
+  let { fields } = req.body;
+  
+  axiosClient.post('?company_id=company_413ef22b6237417fb1fba7917f0f69e7',
+  {
+    assigned_user:  fields.assigned_user, 
+    task_date: fields.task_date,
+    task_time: fields.task_time ,
+    is_completed: fields.is_completed,
+    time_zone: fields.task_time - fields.time_zone,
+    task_msg: fields.task_msg
+  })
+  .then(response => {
+    res.send(response.data)
+  }).catch(({request}) => {
+    res.send(request)
+  })
+})
+
+app.put('/task', (req, res) => {
+  let { fields, taskId } = req.body
+
+  axiosClient.put('/'+ taskId + '?company_id=company_413ef22b6237417fb1fba7917f0f69e7',
+  {
+    assigned_user:  fields.assigned_user, 
+    task_date: fields.task_date,
+    task_time: fields.task_time ,
+    is_completed: fields.is_completed,
+    time_zone: fields.task_time - fields.time_zone,
+    task_msg: fields.task_msg
+  }).then(response => {
+    res.send(response.data)
+  }).catch(({request}) => {
+    res.send(request)
+  })
+})
+
+app.delete('/task', (req, res) => {
+  let { taskId } = req.params;
+
+  axiosClient.delete('/'+ taskId + '?company_id=company_413ef22b6237417fb1fba7917f0f69e7')
+  .then(response => {
+    res.send(response.data)
+  }).catch(({request}) => {
+    res.send(request)
+  })
 })
 
 app.get('*', (req, res) => {

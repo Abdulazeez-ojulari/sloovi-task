@@ -2,6 +2,7 @@ const axios = require('axios');
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const path = require('path');
 
 var corsOption = {
     origin: ["http://localhost:3001", "https://glacial-brook-33351.herokuapp.com", "http://localhost:3000", "http://localhost:3002", "http://localhost:3003"]
@@ -9,9 +10,7 @@ var corsOption = {
 
 app.use(cors(corsOption));
 
-const port = process.env.PORT || 5000
-
-app.listen(port, ()=> console.log(`listing to ${port}`))
+app.use(express.static(path.join(__dirname, 'build')))
 
 app.get('/tasks', (req, res) => {
     axios({
@@ -24,3 +23,11 @@ app.get('/tasks', (req, res) => {
         res.send(response.data)
       }).catch(err => {console.log(err.message)})
 })
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname+'/build/index.html'))
+})
+
+const port = process.env.PORT || 5000
+
+app.listen(port, ()=> console.log(`listing to ${port}`))

@@ -1,3 +1,4 @@
+import axios from "axios";
 import { axiosClient } from "../components/http-setting";
 import { ADD_TASK, DELETE_TASK, TASK_LOADED, UPDATE_TASK } from "../constants/action-constants";
 
@@ -49,7 +50,8 @@ export const deleteTask = (taskId) => {
 
 export function getTasks() {
     return function(dispatch) {
-        return axiosClient.get('?company_id=company_413ef22b6237417fb1fba7917f0f69e7')
+        
+        return axios.get('/tasks')
         .then(res => {
             dispatch({ type: TASK_LOADED, payload: res.data.results });
         })

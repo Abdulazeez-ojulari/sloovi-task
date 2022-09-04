@@ -63,7 +63,7 @@ app.put('/task', (req, res) => {
   })
 })
 
-app.delete('/task', (req, res) => {
+app.delete('/task/:taskId', (req, res) => {
   let { taskId } = req.params;
 
   axiosClient.delete(url+'/'+ taskId + '?company_id=company_413ef22b6237417fb1fba7917f0f69e7')

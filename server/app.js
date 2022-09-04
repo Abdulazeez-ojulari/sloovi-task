@@ -6,8 +6,11 @@ const path = require('path');
 const { axiosClient } = require('./http-setting');
 
 // app.use(cors(corsOption));
-
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, '..', 'build')));
+
+const url = 'https://stage.api.sloovi.com/task/lead_465c14d0e99e4972b6b21ffecf3dd691'
 
 app.get('/teams', (req, res) => {
   axiosClient.get('https://stage.api.sloovi.com/team?product=outreach&company_id=company_413ef22b6237417fb1fba7917f0f69e7')
@@ -17,7 +20,7 @@ app.get('/teams', (req, res) => {
 })
 
 app.get('/tasks', (req, res) => {
-      axiosClient.get('?company_id=company_413ef22b6237417fb1fba7917f0f69e7')
+      axiosClient.get(url+'?company_id=company_413ef22b6237417fb1fba7917f0f69e7')
       .then(response => {
         res.send(response.data)
       }).catch(err => {console.log(err.message)})
@@ -26,7 +29,7 @@ app.get('/tasks', (req, res) => {
 app.post('/task', (req, res) => {
   let { fields } = req.body;
   
-  axiosClient.post('?company_id=company_413ef22b6237417fb1fba7917f0f69e7',
+  axiosClient.post(url+'?company_id=company_413ef22b6237417fb1fba7917f0f69e7',
   {
     assigned_user:  fields.assigned_user, 
     task_date: fields.task_date,
@@ -45,7 +48,7 @@ app.post('/task', (req, res) => {
 app.put('/task', (req, res) => {
   let { fields, taskId } = req.body
 
-  axiosClient.put('/'+ taskId + '?company_id=company_413ef22b6237417fb1fba7917f0f69e7',
+  axiosClient.put(url+'/'+ taskId + '?company_id=company_413ef22b6237417fb1fba7917f0f69e7',
   {
     assigned_user:  fields.assigned_user, 
     task_date: fields.task_date,
@@ -63,7 +66,7 @@ app.put('/task', (req, res) => {
 app.delete('/task', (req, res) => {
   let { taskId } = req.params;
 
-  axiosClient.delete('/'+ taskId + '?company_id=company_413ef22b6237417fb1fba7917f0f69e7')
+  axiosClient.delete(url+'/'+ taskId + '?company_id=company_413ef22b6237417fb1fba7917f0f69e7')
   .then(response => {
     res.send(response.data)
   }).catch(({request}) => {
